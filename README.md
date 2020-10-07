@@ -1,5 +1,5 @@
 # AutoMagic
- The one stop shop for anything related to your vehicle and maintenance. Cut the middleman that comes from going to an automotive store/dealership.
+ The one stop shop for anything related to your vehicle and parts. Cut the middleman that comes from going to an automotive store/dealership.
 
 ## Libraries Needed:
  - [Flask](https://flask.palletsprojects.com/en/1.1.x/installation/)
