@@ -1,5 +1,10 @@
-from flask import Flask, render_template, request, url_for
+
+from getRecalls import fetchRecalls
+from licensePlate import getPlate
+from vinDecode import decodeVin
+from flask import Flask, render_template, request, url_for, redirect
 from forms import *
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'secret'
@@ -12,7 +17,10 @@ def home():
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+
     form = CarSelectorForm()    # defined in forms.py
+    plate = StateForm()
+    vin = VinForm()
 
     con = sql.connect('car_base.db')
     con.row_factory = sql.Row
@@ -32,9 +40,11 @@ def index():
     form.trim.choices = [row['Trim'] for row in cur.fetchall()]
 
     if request.method == 'POST':
-        return summary(form.year.data, form.make.data, form.model.data, form.trim.data)
+        url = "/" + str(form.year.data) + "/" + form.make.data + "/" + form.model.data + "/" + form.trim.data + "/summary"
+        return redirect(url)
+		#return redirect(url_for('summary(form.year.data, form.make.data, form.model.data, form.trim.data)'))
 
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form, plate=plate, vin=vin)
 
 
 # drop down handling when year, make, or model changes
@@ -87,6 +97,68 @@ def summary(year, make, model, trim):
     }
     return render_template('summary.html', car=car)
 
+#wrapper for YMMT form
+@app.route('/YMMT', methods=['POST'])
+def ymmt():
+
+	form = CarSelectorForm()
+	plate = StateForm()
+	vin = VinForm()
+
+	if request.method == 'POST':
+		url = "/" + str(form.year.data) + "/" + form.make.data + "/" + form.model.data + "/" + form.trim.data + "/summary"
+		return redirect(url)
+
+	return render_template('index.html', form=form, plate=plate, vin=vin)
+
+#wrapper for Plate form
+@app.route('/plate', methods=['POST'])
+def plate():
+
+	form = CarSelectorForm()
+	plate = StateForm()
+	vin = VinForm()
+	
+	if request.method == 'POST':
+		outputVIN = getPlate(plate.state.data,plate.plate.data) 
+		if outputVIN == "ER-NoPlate":
+			return render_template('index.html', form=form, plate=plate, vin=vin)
+		return vinPass(outputVIN)
+	return render_template('index.html', form=form, plate=plate, vin=vin)
+
+#wrapper for VIN form
+@app.route('/vin', methods=['POST'])
+def vinParse():
+
+	form = CarSelectorForm()
+	plate = StateForm()
+	vin = VinForm()
+	
+	if request.method == 'POST':
+		outputYMMT = decodeVin(vin.number.data) 
+		if outputYMMT[0] == "ER-BadVin":
+			return render_template('index.html', form=form, plate=plate, vin=vin)
+		url = "/" + str(outputYMMT[0]) + "/" + outputYMMT[1] + "/" + outputYMMT[2] + "/" + outputYMMT[3] + "/summary"
+		return redirect(url)
+
+	return render_template('index.html', form=form, plate=plate)
+
+#Handler for passed Vin value
+def vinPass(vinput):
+	form = CarSelectorForm()
+	plate = StateForm()
+	vin = VinForm()
+
+	outputYMMT = decodeVin(vinput) 
+
+	if outputYMMT[0] == "ER-BadVin":
+		return render_template('index.html', form=form, plate=plate, vin=vin)
+
+	url = "/" + str(outputYMMT[0]) + "/" + outputYMMT[1] + "/" + outputYMMT[2] + "/" + outputYMMT[3] + "/summary"
+	return redirect(url)
+
+	
+#Form handler for License plate
 
 if __name__ == '__main__':
     app.run(debug=True)
