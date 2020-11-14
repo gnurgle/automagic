@@ -1,17 +1,7 @@
-{% extends "base.html" %}
-{% block content %}
-    <form method="POST">
-        {{ form.year }}
-        {{ form.make }}
-        {{ form.model }}
-        {{ form.trim }}
-        <input type="Submit">
-    </form>
-    <script>
-        let year_select = document.getElementById('year');
-        let make_select = document.getElementById('make');
-        let model_select = document.getElementById('model');
-        let trim_select = document.getElementById('trim');
+let year_select = document.getElementById('year');
+let make_select = document.getElementById('make');
+let model_select = document.getElementById('model');
+let trim_select = document.getElementById('trim');
 
         year_select.onchange = function() {
             year = year_select.value;
@@ -72,6 +62,3 @@
                 })
             });
         }
-
-    </script>
-{% endblock %}
