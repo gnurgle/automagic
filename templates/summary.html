@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{car['Year']}} {{car['Make']}} {{car['Model']}} {{car['Trim']}}</h1><br>
+<a href = "{{ url_for('index')}}">Back</a>
+{% endblock %}
