@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import re
+import sqlite3 as sql
 
 def getCodes():
 
@@ -9,19 +11,23 @@ def getCodes():
 	#https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php
 	#https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php
 	#-----HERE------
+
+	url2 = "https://www.obd-codes.com/body-codes"
+	url3 = "https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php"
+	url4 = "https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php"
 	
 	#Url for scraping
 	url = "https://www.obd-codes.com/p00-codes"
 
 	#Fetch URL
 	response = requests.get(url)
-
+	response2 = requests.get(url2)
 	#Parse HTML
 	soup = BeautifulSoup(response.content, 'html.parser')
-
+	soup2 = BeautifulSoup(response2.content, 'html.parser')
 	#Grab list of all entries on page
 	codes = soup.find_all('li')
-
+	codes2 = soup.find_all('li')
 	#Split into Numbers and Names
 	codeNames = []
 	codeNumbers = []
@@ -50,8 +56,6 @@ def getCodes():
 	#Commit CodeNames, CodeNumbers, and CodeDesc to DB
 	# --HERE--
 
-
-
 def getCodeInfo(num):
 
 	#base url
@@ -71,6 +75,11 @@ def getCodeInfo(num):
 
 	#Check for content
 	#----HERE----
+	test = soup.find_all(text=re.compile('Code Description'))
+	if test:
+		print("VALID PROBLEM CODE DETECTED")
+	else:
+		print("INVALID PROBLEM CODE, TRY AGAIN")
 
 	#Filter html tags out
 	codeDesc = []
@@ -82,7 +91,6 @@ def getCodeInfo(num):
 	codeDesc = codeDesc[1:10]
 	print(codeDesc)
 	return (codeDesc)
-
 
 
 if __name__ == '__main__':
