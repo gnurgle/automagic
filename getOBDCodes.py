@@ -52,13 +52,12 @@ def getCodes():
 	#----HERE-----DONE
 	if codeNumbers[0] == 'P':
 		print("P listing valid for scraping")
-		return True
-	else:
-		print("Not a P listing, try again")
-		#return False
 	#Send CodeNumber to page scraper
 	for num in codeNumbers:
 		codeDesc = getCodeInfo(num)
+	else:
+		print("NO")
+		return False
 
 	#Commit CodeNames, CodeNumbers, and CodeDesc to DB
 	# --HERE--
