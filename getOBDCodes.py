@@ -48,13 +48,19 @@ def getCodes():
 
 	#Insert a check here for P listings only
 	#----HERE-----
-	
+	if codeNumbers[0] == 'P':
+		print("P listing valid for scraping")
+		return True
+	else:
+		print("Not a P listing, try again")
+		return False
 	#Send CodeNumber to page scraper
 	for num in codeNumbers:
 		codeDesc = getCodeInfo(num)
 
 	#Commit CodeNames, CodeNumbers, and CodeDesc to DB
 	# --HERE--
+	#with sql.connect("car_base.zip") as con:
 
 def getCodeInfo(num):
 
@@ -74,12 +80,14 @@ def getCodeInfo(num):
 	results = soup.find_all('span')
 
 	#Check for content
-	#----HERE----
+	#----HERE----DONE
 	test = soup.find_all(text=re.compile('Code Description'))
 	if test:
 		print("VALID PROBLEM CODE DETECTED")
+		return True
 	else:
 		print("INVALID PROBLEM CODE, TRY AGAIN")
+		return False
 
 	#Filter html tags out
 	codeDesc = []
