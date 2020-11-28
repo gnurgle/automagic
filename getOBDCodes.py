@@ -1,7 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+from flask import Flask, render_template, request
 import sqlite3 as sql
+app = Flask(__name__)
 
 def getCodes():
 
@@ -61,7 +63,10 @@ def getCodes():
 
 	#Commit CodeNames, CodeNumbers, and CodeDesc to DB
 	# --HERE--
-	#with sql.connect("car_base.zip") as con:
+	with sql.connect("car_base.db") as con:
+		cur = con.cursor()
+		cur.execute("INSERT INTO carbase(codeNames, codeNumbers, codeDesc) VALUES(?,?,?)", (codeNames, codeNumbers, codeDesc))
+
 
 def getCodeInfo(num):
 
@@ -83,7 +88,7 @@ def getCodeInfo(num):
 	#Check for content
 	#----HERE----DONE
 	test = soup.find_all(text=re.compile('Code Description'))
-	if test:
+	if test == True:
 		print("VALID PROBLEM CODE DETECTED")
 		return True
 	else:
