@@ -1,4 +1,3 @@
-
 from getRecalls import fetchRecalls
 from licensePlate import getPlate
 from vinDecode import decodeVin
@@ -17,8 +16,7 @@ def home():
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-
-    form = CarSelectorForm()    # defined in forms.py
+    form = CarSelectorForm()  # defined in forms.py
     plate = StateForm()
     vin = VinForm()
 
@@ -42,7 +40,7 @@ def index():
     if request.method == 'POST':
         url = "/" + str(form.year.data) + "/" + form.make.data + "/" + form.model.data + "/" + form.trim.data + "/summary"
         return redirect(url)
-		#return redirect(url_for('summary(form.year.data, form.make.data, form.model.data, form.trim.data)'))
+    # return redirect(url_for('summary(form.year.data, form.make.data, form.model.data, form.trim.data)'))
 
     return render_template('index.html', form=form, plate=plate, vin=vin)
 
@@ -97,69 +95,69 @@ def summary(year, make, model, trim):
     }
     return render_template('summary.html', car=car)
 
-#wrapper for YMMT form
+
+# wrapper for YMMT form
 @app.route('/YMMT', methods=['POST'])
 def ymmt():
+    form = CarSelectorForm()
+    plate = StateForm()
+    vin = VinForm()
 
-	form = CarSelectorForm()
-	plate = StateForm()
-	vin = VinForm()
+    if request.method == 'POST':
+        url = "/" + str(form.year.data) + "/" + form.make.data + "/" + form.model.data + "/" + form.trim.data + "/summary"
+        return redirect(url)
 
-	if request.method == 'POST':
-		url = "/" + str(form.year.data) + "/" + form.make.data + "/" + form.model.data + "/" + form.trim.data + "/summary"
-		return redirect(url)
+    return render_template('index.html', form=form, plate=plate, vin=vin)
 
-	return render_template('index.html', form=form, plate=plate, vin=vin)
 
-#wrapper for Plate form
+# wrapper for Plate form
 @app.route('/plate', methods=['POST'])
 def plate():
+    form = CarSelectorForm()
+    plate = StateForm()
+    vin = VinForm()
 
-	form = CarSelectorForm()
-	plate = StateForm()
-	vin = VinForm()
-	
-	if request.method == 'POST':
-		outputVIN = getPlate(plate.state.data,plate.plate.data) 
-		if outputVIN == "ER-NoPlate":
-			return render_template('index.html', form=form, plate=plate, vin=vin)
-		return vinPass(outputVIN)
-	return render_template('index.html', form=form, plate=plate, vin=vin)
+    if request.method == 'POST':
+        outputVIN = getPlate(plate.state.data, plate.plate.data)
+        if outputVIN == "ER-NoPlate":
+            return render_template('index.html', form=form, plate=plate, vin=vin)
+        return vinPass(outputVIN)
+    return render_template('index.html', form=form, plate=plate, vin=vin)
 
-#wrapper for VIN form
+
+# wrapper for VIN form
 @app.route('/vin', methods=['POST'])
 def vinParse():
+    form = CarSelectorForm()
+    plate = StateForm()
+    vin = VinForm()
 
-	form = CarSelectorForm()
-	plate = StateForm()
-	vin = VinForm()
-	
-	if request.method == 'POST':
-		outputYMMT = decodeVin(vin.number.data) 
-		if outputYMMT[0] == "ER-BadVin":
-			return render_template('index.html', form=form, plate=plate, vin=vin)
-		url = "/" + str(outputYMMT[0]) + "/" + outputYMMT[1] + "/" + outputYMMT[2] + "/" + outputYMMT[3] + "/summary"
-		return redirect(url)
+    if request.method == 'POST':
+        outputYMMT = decodeVin(vin.number.data)
+        if outputYMMT[0] == "ER-BadVin":
+            return render_template('index.html', form=form, plate=plate, vin=vin)
+        url = "/" + str(outputYMMT[0]) + "/" + outputYMMT[1] + "/" + outputYMMT[2] + "/" + outputYMMT[3] + "/summary"
+        return redirect(url)
 
-	return render_template('index.html', form=form, plate=plate)
+    return render_template('index.html', form=form, plate=plate)
 
-#Handler for passed Vin value
+
+# Handler for passed Vin value
 def vinPass(vinput):
-	form = CarSelectorForm()
-	plate = StateForm()
-	vin = VinForm()
+    form = CarSelectorForm()
+    plate = StateForm()
+    vin = VinForm()
 
-	outputYMMT = decodeVin(vinput) 
+    outputYMMT = decodeVin(vinput)
 
-	if outputYMMT[0] == "ER-BadVin":
-		return render_template('index.html', form=form, plate=plate, vin=vin)
+    if outputYMMT[0] == "ER-BadVin":
+        return render_template('index.html', form=form, plate=plate, vin=vin)
 
-	url = "/" + str(outputYMMT[0]) + "/" + outputYMMT[1] + "/" + outputYMMT[2] + "/" + outputYMMT[3] + "/summary"
-	return redirect(url)
+    url = "/" + str(outputYMMT[0]) + "/" + outputYMMT[1] + "/" + outputYMMT[2] + "/" + outputYMMT[3] + "/summary"
+    return redirect(url)
 
-	
-#Form handler for License plate
+
+# Form handler for License plate
 
 if __name__ == '__main__':
     app.run(debug=True)
-
