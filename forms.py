@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, validators
 import sqlite3 as sql
+from ra_scraper import get_car_part_types
 
 
 class CarSelectorForm(FlaskForm):
@@ -16,6 +17,15 @@ class CarSelectorForm(FlaskForm):
     make = SelectField('make', choices=[])
     model = SelectField('model', choices=[])
     trim = SelectField('trim', choices=[])
+
+class PartForm(FlaskForm):
+
+	partCat = SelectField('partCat', choices=[])
+	partList = SelectField('partList', choices=[])
+
+	def getParts(self,year,make,model,engine):
+		return(get_car_part_types(year,make,model,engine))
+	
 
 class VinForm(FlaskForm):
 	number = StringField('Number', [validators.InputRequired()])

@@ -1,5 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{car['Year']}} {{car['Make']}} {{car['Model']}} {{car['Trim']}}</h1><br>
-<a href = "{{ url_for('index')}}">Back</a>
+
+	<div id ="topbar" style="text-align:center;background-color:#cccccc;width:100%;float:left" >
+	<h1>{{results[0]}} {{results[1]}} {{results[2]}} {{results[3]}}</h1><br>
+		<div style="width:80%;margin: 0 10%;position:static;text-align:center">
+			<h2 style="float:left">Manufacturered In: {{results[4]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Body Type: {{results[6]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Engine: {{results[7]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Transmission: {{results[9]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Drive Type: {{results[10]}}  </h2>
+			<h2 style="float:left;margin-left:1em">MPG City: {{results[12]}}  </h2>
+			<h2 style="float:left;margin-left:1em">MPG Highway: {{results[13]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Fuel Tank Size: {{results[11]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Front Brake Type: {{results[16]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Rear Brake Type: {{results[17]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Tires: {{results[23]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Front Head Room: {{results[24]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Front Leg Room: {{results[26]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Rear Head Room: {{results[25]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Rear Leg Room: {{results[27]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Seats: {{results[47]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Interior Trim Colors: {{results[32]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Exterior Colors: {{results[33]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Weight Automatic: {{results[34]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Weight Manual: {{results[35]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Length: {{results[36]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Width: {{results[37]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Height: {{results[38]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Wheelbase: {{results[39]}}  </h2>
+			<h2 style="float:left;margin-left:1em">MSRP: {{results[63]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Invoice: {{results[64]}}  </h2>
+			<h2 style="float:left;margin-left:1em">Destination Charge: {{results[65]}}  </h2>
+			<a href="/{{results[0]}}/{{results[1]}}/{{results[2]}}/{{results[3]}}/review">Link here hopefully</a>
+		</div>
+	</div>
 {% endblock %}

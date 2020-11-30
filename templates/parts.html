@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Select Parts</h1>
+    <form action="/{{results[0]}}/{{results[1]}}/{{results[2]}}/{{results[3]}}/partListings" method="POST">
+        {{ part.partCat }}
+        {{ part.partList }}
+        <input type="Submit">
+
+    <div id="Display">
+    </div>
+<div id="year" data-value="{{results[0]}}"></div>
+<div id="make" data-value="{{results[1]}}"></div>
+<div id="model" data-value="{{results[2]}}"></div>
+<div id="trim" data-value="{{results[3]}}"></div>
+
+<script src="/static/js/drop-form.js"></script>
+
+{% endblock %}
