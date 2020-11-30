@@ -2,7 +2,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def fetchEdmunds(year,make,model):
+def fetchReview(year,make,model):
 
 	#Base URL
 	baseUrl = "https://www.autoblog.com/buy/" + str(year) + "-" + make + "-" + \
@@ -15,7 +15,7 @@ def fetchEdmunds(year,make,model):
 	review.append(baseUrl)
 	
 	#Iterate through 5 pages of review
-	for i in range(1,5):
+	for i in range(1,3):
 
 		#Change url for each page number
 		url = baseUrl + "pg-" + str(i) + "/"
@@ -36,7 +36,7 @@ def fetchEdmunds(year,make,model):
 
 		#Check if non review
 		if not review_block:
-			i = 5
+			i = 4
 		else:
 			review.append(text_results)
 

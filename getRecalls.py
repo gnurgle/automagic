@@ -11,7 +11,7 @@ def fetchRecalls(year,make,model):
 	#Fetch Page
 	page = requests.get(url)
 
-	if response.status_code != 200:
+	if page.status_code != 200:
 		return ("No Recalls Found")
 
 	#Decode with Beautiful Soup
@@ -22,7 +22,11 @@ def fetchRecalls(year,make,model):
 
 	#Fetch just recal info
 	output = results.find_all('div', class_="cf safety-recall")
-	
+
+	#Strip initial formatting issue and last bracket
+	output = str(output)[1:]
+	output = output[:-1]
+
 	#Return for info
-	return (results)
+	return (output)
 
