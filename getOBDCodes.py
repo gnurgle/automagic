@@ -1,9 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import re
-from flask import Flask, render_template, request
-import sqlite3 as sql
-app = Flask(__name__)
 
 def getCodes():
 
@@ -14,24 +10,18 @@ def getCodes():
 	#https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php
 	#-----HERE------
 
-	url2 = "https://www.obd-codes.com/body-codes"
-	url3 = "https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php"
-	url4 = "https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php"
-
 	#Url for scraping
-
-	listName = ["https://www.obd-codes.com/p00-codes", "https://www.obd-codes.com/trouble_codes/",
-	"https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php", "https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php",
-	"https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php"]
-	for i in range(0,len(listName)):
-		url = listName[i]
+	url = "https://www.obd-codes.com/p00-codes"
 
 	#Fetch URL
 	response = requests.get(url)
+
 	#Parse HTML
 	soup = BeautifulSoup(response.content, 'html.parser')
+
 	#Grab list of all entries on page
 	codes = soup.find_all('li')
+
 	#Split into Numbers and Names
 	codeNames = []
 	codeNumbers = []
@@ -51,21 +41,21 @@ def getCodes():
 	codeNumbers = codeNumbers[7:-1]
 
 	#Insert a check here for P listings only
-	#----HERE-----DONE
-	if codeNumbers[0] == 'P':
-		print("P listing valid for scraping")
+	#----HERE-----
+	for i in range(0,len(codeNumbers)):
+		if codeNumbers[i][0] == 'P':
+			print("Valid P-Code for scraping")
+		else:
+			print("Not a valid P-Code, try again")
+			return False
+
 	#Send CodeNumber to page scraper
 	for num in codeNumbers:
 		codeDesc = getCodeInfo(num)
-	else:
-		print("NO")
-		return False
 
 	#Commit CodeNames, CodeNumbers, and CodeDesc to DB
 	# --HERE--
-	with sql.connect("car_base.db") as con:
-		cur = con.cursor()
-		cur.execute("INSERT INTO carbase(codeNames, codeNumbers, codeDesc) VALUES(?,?,?)", (codeNames, codeNumbers, codeDesc))
+
 
 
 def getCodeInfo(num):
@@ -86,14 +76,7 @@ def getCodeInfo(num):
 	results = soup.find_all('span')
 
 	#Check for content
-	#----HERE----DONE
-	test = soup.find_all(text=re.compile('Code Description'))
-	if test == True:
-		print("VALID PROBLEM CODE DETECTED")
-		return True
-	else:
-		print("INVALID PROBLEM CODE, TRY AGAIN")
-		return False
+	#----HERE----
 
 	#Filter html tags out
 	codeDesc = []
