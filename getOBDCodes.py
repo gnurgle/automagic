@@ -2,9 +2,9 @@ import requests
 import re
 import urllib3
 from bs4 import BeautifulSoup
+import sqlite3 as sql
 
 def getCodes():
-
 	#Update this to work for all of the following pages
 	#https://www.obd-codes.com/trouble_codes/
 	#https://www.obd-codes.com/body-codes
@@ -23,13 +23,13 @@ def getCodes():
 		if listName[0] == j:
 			url = "https://www.obd-codes.com/p00-codes",
 		elif listName[1] == j:
-			print("NO")
+			print("Not a valid P-Code for scraping")
 		elif listName[2] == "https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php":
-			print("NO")
+			print("Not a valid P-Code for scraping")
 		elif listName[3] == "https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php":
-			print("NO")
+			print("Not a valid P-Code for scraping")
 		elif listName[4] == "https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php":
-			print("NO")
+			print("Not a valid P-Code for scraping")
 	#Fetch URL
 	response = requests.get(url)
 
@@ -73,8 +73,11 @@ def getCodes():
 
 	#Commit CodeNames, CodeNumbers, and CodeDesc to DB
 	# --HERE--
-
-
+	con = sql.connect("base_car.db")
+	con.row_factory = sql.Row
+	con.text_factory = str
+	cur = con.cursor()
+	cur.execute("INSERT INTO ")
 
 def getCodeInfo(num):
 
