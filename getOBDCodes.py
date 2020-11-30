@@ -1,4 +1,6 @@
 import requests
+import re
+import urllib3
 from bs4 import BeautifulSoup
 
 def getCodes():
@@ -12,7 +14,22 @@ def getCodes():
 
 	#Url for scraping
 	url = "https://www.obd-codes.com/p00-codes"
+	listName = ["https://www.obd-codes.com/p00-codes", "https://www.obd-codes.com/trouble_codes/",
+				"https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php",
+				"https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php",
+				"https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php"]
 
+	for j in range(0,len(listName)):
+		if listName[0] == j:
+			url = "https://www.obd-codes.com/p00-codes",
+		elif listName[1] == j:
+			print("NO")
+		elif listName[2] == "https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php":
+			print("NO")
+		elif listName[3] == "https://www.obd-codes.com/trouble_codes/obd-ii-c-chassis-codes.php":
+			print("NO")
+		elif listName[4] == "https://www.obd-codes.com/trouble_codes/obd-ii-u-network-codes.php":
+			print("NO")
 	#Fetch URL
 	response = requests.get(url)
 
@@ -47,6 +64,7 @@ def getCodes():
 			print("Valid P-Code for scraping")
 		else:
 			print("Not a valid P-Code, try again")
+			print(url)
 			return False
 
 	#Send CodeNumber to page scraper
@@ -77,7 +95,12 @@ def getCodeInfo(num):
 
 	#Check for content
 	#----HERE----
-
+	response = requests.get(url)
+	if response:
+		print("Content dectected on page!")
+	else:
+		print("Content not dectred on page! Try again!")
+		return False
 	#Filter html tags out
 	codeDesc = []
 	for result in results:
