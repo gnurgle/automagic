@@ -12,10 +12,11 @@
       <ul>
         <li class="navhome"><a href="{{url_for('home')}}">Home</a></li>
         <li class="navfind"><a href="{{url_for('index')}}">Search</a></li>
-        <li class="navfind"><a href="{{url_for('review')}}">Review</a></li>
-        <li class="navfind"><a href="{{url_for('index')}}">Search</a></li>
-        <li class="navfind"><a href="{{url_for('index')}}">Search</a></li>
-        <li class="navabout"><a href="#">About</a></li>
+        <li class="navfind"><a href="/{{results[0]}}/{{results[1]}}/{{results[2]}}/{{results[3]}}/summary">Summary</a></li> 
+        <li class="navfind"><a href="/{{results[0]}}/{{results[1]}}/{{results[2]}}/{{results[3]}}/review">Review</a></li> 
+        <li class="navfind"><a href="/{{results[0]}}/{{results[1]}}/{{results[2]}}/{{results[3]}}/recalls">Recalls</a></li> 
+        <li class="navfind"><a href="/{{results[0]}}/{{results[1]}}/{{results[2]}}/{{results[3]}}/parts">Parts</a></li> 
+        <li class="navfind"><a href="/{{results[0]}}/{{results[1]}}/{{results[2]}}/{{results[3]}}/forsale">For sale</a></li> 
       </ul>
     </div>
   </header>

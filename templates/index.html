@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="text-align:center;width:100%;float:left">
 	<h1>Select Vehicle By Year/Make/Model/Trim</h1>
     <form action=" {{url_for('ymmt')}}" method="POST">
         {{ form.year }}
@@ -21,7 +22,8 @@
         {{ vin.number }}
         <input type="Submit">
     </form>
-	
+<div>
+
 <script src="/static/js/drop-form.js"></script>
 
 {% endblock %}

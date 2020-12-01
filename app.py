@@ -212,6 +212,17 @@ def recalls(year,make,model,trim):
 	results = [year,make,model,trim]
 	return render_template('recalls.html', results=results, recalls=fetchRecalls(year,make,model))
 
+#Display Car Recalls
+@app.route('/<year>/<make>/<model>/<trim>/forsale')
+def forsale(year,make,model,trim):
+	results = [year,make,model,trim]
+	url = 	"https://www.autotrader.com/cars-for-sale/all-cars/" + \
+			str(year) + "/" + make + "/" + model + "/talahassee-fl-32301?searchRadius=0"
+
+
+	#return render_template('forsale.html', results=results)
+	return redirect(url)
+	
 #Display Parts
 @app.route('/<year>/<make>/<model>/<trim>/parts')
 def parts(year,make,model,trim):
