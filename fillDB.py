@@ -37,7 +37,7 @@ def buildManfId():
     for i in range(1, response['Count'], 1):
         resYear.append(response['Results'][i]['Year'])
 
-    # Iterate through list of Model+Trim from FuelGov and match to base model NHTSA
+    # Iterate through list of Model+Year from FuelGov and match to base model NHTSA
     for i in range(len(rowTxt)):
         matchResult = (process.extractOne(nhtsaList[i], rowTxt, score_cutoff=90))
         if not matchResult:
@@ -47,7 +47,7 @@ def buildManfId():
             print("for " + nhtsaList[i])
             print(matchResult[0])
             for j in range(len(rowTxt)):
-                # Syncs up nhtsaList with resMakeID to make sure right ID goes with rowTxt
+                # Syncs up nhtsaList with resYear to make sure right ID goes with rowTxt
                 if rowTxt[j] == matchResult[0]:
                     cur.execute("INSERT OR IGNORE INTO Manf (Make, Year) VALUES(?,?)", (rowTxt[j], resYear[i]))
                     con.commit()
@@ -102,29 +102,7 @@ def newDBEntries():
             print(rows[i][0])
             rowTxt.append(rows[i][0])
 
-        # Iterate through each model+trim
-        for i in range(len(rowTxt)):
-            # Find one that closest matches a base model from NHTSA
-            matchResult = (process.extractOne(rowTxt[i], nhtsaModelList, score_cutoff=70))
-            if not matchResult:
-                print("No Match found for " + rowTxt[i])
-            else:
 
-                # If it's not already a match cut the trim off the model+trim
-                if not len(matchResult[0]) == len(rowTxt[i]):
-                    tempTrim = copy.copy(rowTxt[i])
-                    modelTrim = tempTrim[len(matchResult[0]) + 1:]
-                else:
-                    modelTrim = None
-                for j in range(len(nhtsaModelList)):
-                    if nhtsaModelList[j] == matchResult[0]:
-                        # cur.execute("INSERT OR IGNORE INTO Model (Make, Model, Year) VALUES(?,?,?)",(rowCheck[m][0],rowTxt[i],resModelId[j]))
-                        cur.execute("INSERT OR IGNORE INTO Model (Year, Make, Model, Trim) VALUES(?,?,?,?)",
-                                    (resYear[j], rowCheck[m][0], nhtsaModelList[j], modelTrim))
-                        con.commit()
-                        # print (rowCheck[m][0] + " " + nhtsaModelList[j] + "is ID# " + str(resModelId[j]) + str(modelTrim))
-                        print(
-                            rowCheck[m][0] + " " + nhtsaModelList[j] + " " + str(modelTrim) + " " + str(resYear[j]))
 
         # select values from NHTSA that are not in the car_base.db
         cur.execute("SELECT DISTINCT Year,Make, Model FROM Model EXCEPT SELECT Year,Make,Model FROM Base")
@@ -145,7 +123,12 @@ def newDBEntries():
 
 
         for i in range(len(rowTxt)):
-            sortArgs("-s",rows[i][0],rows[i][1],rows[i][2])
+            # Find one that closest matches a base model from NHTSA
+            matchResult = (process.extractOne(rowTxt[i], resYear[i] + rowCheck[i][0] + nhtsaModelList[i], score_cutoff=80))
+            if not matchResult:
+                print("No Match found for " + rowTxt[i])
+            else:
+                sortArgs("-s",rows[i][0],rows[i][1],rows[i][2])
 
 
 if __name__ == '__main__':
