@@ -73,11 +73,11 @@ def getCodes():
 
 	#Commit CodeNames, CodeNumbers, and CodeDesc to DB
 	# --HERE--
-	con = sql.connect("base_car.db")
+	con = sql.connect("car_base.db")
 	con.row_factory = sql.Row
 	con.text_factory = str
 	cur = con.cursor()
-	cur.execute("INSERT INTO ")
+	cur.execute("INSERT INTO car_base (codeName, codeNumbers, codeDesc) VALUES (?,?,?)")
 
 def getCodeInfo(num):
 
@@ -102,7 +102,7 @@ def getCodeInfo(num):
 	if response:
 		print("Content dectected on page!")
 	else:
-		print("Content not dectred on page! Try again!")
+		print("Content not dectected on page! Try again!")
 		return False
 	#Filter html tags out
 	codeDesc = []
